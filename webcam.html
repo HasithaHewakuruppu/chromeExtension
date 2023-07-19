@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webcam Feed</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #webcam-feed {
+      width: 640px;
+      height: 480px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+
+<body>
+
+    <section>
+        <p>Hold some objects up close to your webcam to get a real-time classification! When ready click "enable webcam" below and accept access to the webcam when the browser asks (check the top left of your window)</p>
+        <div id="liveView" class="camView">
+          <video id="webcam" autoplay muted width="640" height="480"></video>
+        </div>
+    </section>
+
+  <script>
+    // Get access to the webcam and display the feed in the video element
+    async function setupWebcam() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const videoElement = document.getElementById('webcam');
+        videoElement.srcObject = stream;
+      } catch (err) {
+        console.error('Error accessing webcam:', err);
+      }
+    }
+    // Call the setupWebcam function when the document is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      setupWebcam();
+    });
+  </script>
+  
+</body>
+
+</html>
