@@ -2,13 +2,6 @@ require('@tensorflow/tfjs-backend-cpu');
 require('@tensorflow/tfjs-backend-webgl');
 const cocoSsd = require('@tensorflow-models/coco-ssd');
 
-var model = undefined;
-cocoSsd.load().then(function (loadedModel) {
-  model = loadedModel;
-  // Show demo section now model is ready to use.
-  demosSection.classList.remove('invisible');
-});
-
 // Define the predictWebcam function based on the provided code
 function predictWebcam(model, liveView, video, children) {
   // Now let's start classifying a frame in the video.
@@ -56,13 +49,16 @@ function predictWebcam(model, liveView, video, children) {
 // Function to set up object detection on the webcam feed
 async function setupWebcamObjectDetection() {
   try {
-    const videoElement = document.getElementById('webcam');
+    // const videoElement = document.getElementById('webcam');
+    const videoElement = document.querySelector(".video-stream.html5-main-video");
 
     // Load the pre-trained model. You need to replace 'path/to/model' with the actual model path or URL.
     const model = await cocoSsd.load();
 
     // Call the predictWebcam function to start object detection on each frame.
-    const liveView = document.getElementById('liveView');
+    // const liveView = document.getElementById('liveView');
+    const liveView = document.querySelector(".html5-video-container");
+    liveView.classList.add("camView");
     const children = [];
     predictWebcam(model, liveView, videoElement, children);
   } catch (err) {
