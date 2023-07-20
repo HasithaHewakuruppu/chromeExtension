@@ -2,75 +2,55 @@ require('@tensorflow/tfjs-backend-cpu');
 require('@tensorflow/tfjs-backend-webgl');
 const cocoSsd = require('@tensorflow-models/coco-ssd');
 
-// Content script
-
-let isDetecting = false; // Track whether the object detection is running
-let stopWebcamObjectDetection = false; // Flag to stop the object detection loop
+let isDetecting = false; // Check whether the object detection is running
+let stopVideoObjectDetection = false; // Flag to stop the object detection loop
 let children = []; // Store references to the highlighted elements
 
 chrome.runtime.onMessage.addListener(async function(message) {
 
-  const videoSrcUrl = message.srcUrl;
-  if (!videoSrcUrl) {
-    console.log("Error: No video URL found.");
-    return;
-  }
-  
-  // Access the video element directly using the Blob URL
-  const videoElement = document.querySelector(`video[src="${videoSrcUrl}"]`);
-  if (!videoElement) {
-    console.log("Error: Video element not found.");
-    return;
-  }
-  
-  // Access the parent element of the video
-  const videoParentElement = videoElement.parentElement;
-  console.log("Parent element: ", videoParentElement);
-  console.log("Video element: ", videoElement);
-
-  if (message.action === "startDetection") {
+  const [videoElement, videoParentElement] = getVideoElementAndParent(message.srcUrl)
+  if (message.action === "startObjectDetection") {
       if (!isDetecting) {
           isDetecting = true;
-          stopWebcamObjectDetection = false; // Reset the stop flag
+          stopVideoObjectDetection = false; // Reset the stop flag
           console.log("Start Detection clicked");
-          await setupWebcamObjectDetection(videoElement,videoParentElement); // Start object detection
+          await setupVideoObjectDetection(videoElement,videoParentElement); // Start object detection
       }
-  } else if (message.action === "stopDetection") {
+  } else if (message.action === "stopObjectDetection") {
       if (isDetecting) {
           isDetecting = false;
-          stopWebcamObjectDetection = true; // Set the stop flag
+          stopVideoObjectDetection = true; // Set the stop flag
           console.log("Stop Detection clicked");
           removeHighlightedElements(videoParentElement); // Remove highlighted elements when stopping
       }
   }
-
 });
 
-async function setupWebcamObjectDetection(videoElement,videoParentElement) {
+async function setupVideoObjectDetection(videoElement,videoParentElement) {
     try {
         const model = await cocoSsd.load();
-        videoParentElement.classList.add("camView");
-        predictWebcam(model, videoParentElement, videoElement);
+        videoParentElement.classList.add("videoView");
+        predictObjectDetection(model, videoParentElement, videoElement);
 
     } catch (err) {
         console.error('Error loading the model:', err);
     }
 }
 
-function predictWebcam(model, videoContainer, video) {
-    if (stopWebcamObjectDetection) {
-        // If stopWebcamObjectDetection is true, exit the loop and stop object detection
+function predictObjectDetection(model, videoContainer, video) {
+    if (stopVideoObjectDetection) {
+        // If stopVideoObjectDetection is true, exit the loop and stop object detection
         isDetecting = false;
-        stopWebcamObjectDetection = false;
+        stopVideoObjectDetection = false;
         return;
     }
 
-    // Now let's start classifying a frame in the video.
+    //Start classifying a frame in the video.
     model.detect(video).then(function(predictions) {
         removeHighlightedElements(videoContainer); // Remove the previous highlighted elements
         children = [];
 
-        // Now let's loop through predictions and draw them to the live view if
+        // Loop through predictions and draw them to the live view if
         // they have a high confidence score and are classified as "person".
         for (let n = 0; n < predictions.length; n++) {
             if (predictions[n].class === 'person' && predictions[n].score > 0.01) {
@@ -101,7 +81,7 @@ function predictWebcam(model, videoContainer, video) {
         // Check if object detection is still running
         if (isDetecting) {
             // Call this function again to keep predicting when the browser is ready.
-            window.requestAnimationFrame(() => predictWebcam(model, videoContainer, video));
+            window.requestAnimationFrame(() => predictObjectDetection(model, videoContainer, video));
         }
     });
 }
@@ -112,4 +92,24 @@ function removeHighlightedElements(videoContainer) {
         videoContainer.removeChild(children[i]);
     }
     children = [];
+}
+
+function getVideoElementAndParent(videoSrcUrl) {
+    if (!videoSrcUrl) {
+      console.log("Error: No video URL found.");
+      return;
+    }
+    
+    // Access the video element directly using the Blob URL
+    const videoElement = document.querySelector(`video[src="${videoSrcUrl}"]`);
+    if (!videoElement) {
+      console.log("Error: Video element not found.");
+      return;
+    }
+    
+    // Access the parent element of the video
+    const videoParentElement = videoElement.parentElement;
+    console.log("Parent element: ", videoParentElement);
+    console.log("Video element: ", videoElement);
+    return [videoElement,videoParentElement];
 }

@@ -2,7 +2,7 @@
     display: block;
   }
   
-  .camView {
+  .videoView {
     position: relative;
     float: left;
     width: calc(100% - 20px);
@@ -10,7 +10,7 @@
     cursor: pointer;
   }
   
-  .camView p {
+  .videoView p {
     position: absolute;
     padding: 5px;
     background-color: rgba(255, 111, 0, 0.85);
