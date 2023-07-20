@@ -26,3 +26,11 @@
     z-index: 1;
     position: absolute;
   }
+
+  .keypoint {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    position: absolute;
+  }

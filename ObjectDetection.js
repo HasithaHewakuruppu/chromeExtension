@@ -29,7 +29,6 @@ class ObjectDetection {
   
     stopObjectDetection() {
       if (!this.isDetecting) return;
-  
       this.isDetecting = false;
       this.stopVideoObjectDetection = true;
       console.log("Stop Detection clicked");

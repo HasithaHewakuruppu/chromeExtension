@@ -41,6 +41,7 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
+    
     if (info.menuItemId === "startObjectDetection") {
         // Send a message to the content script with the video element details
         chrome.tabs.sendMessage(tab.id, { 
@@ -53,4 +54,17 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             srcUrl: info.srcUrl
         });
     }
+
+    if (info.menuItemId === "startPoseDetection") {
+        chrome.tabs.sendMessage(tab.id, { 
+            action: "startPoseDetection",
+            srcUrl: info.srcUrl
+        });
+    } else if (info.menuItemId === "stopPoseDetection") {
+        chrome.tabs.sendMessage(tab.id, { 
+            action: "stopPoseDetection",
+            srcUrl: info.srcUrl
+        });
+    }
+
 });

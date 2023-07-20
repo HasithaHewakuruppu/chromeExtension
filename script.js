@@ -1,19 +1,34 @@
 const ObjectDetection = require('./ObjectDetection.js'); 
+const PoseDetection = require('./PoseDetection.js');
 
 let objectDetection = null;
+let poseDetection = null;
 
 chrome.runtime.onMessage.addListener(message => {
+  const [videoElement, videoParentElement] = getVideoElementAndParent(message.srcUrl);
+  
   if (message.action === "startObjectDetection") {
     if (!objectDetection) {
       objectDetection = new ObjectDetection();
     }
-    const [videoElement, videoParentElement] = getVideoElementAndParent(message.srcUrl);
     if (videoElement && videoParentElement) {
       objectDetection.startObjectDetection(videoElement, videoParentElement);
     }
   } else if (message.action === "stopObjectDetection" && objectDetection) {
     objectDetection.stopObjectDetection();
   }
+
+  if (message.action === "startPoseDetection") {
+    if (!poseDetection) {
+      poseDetection = new PoseDetection();
+    }
+    if (videoElement && videoParentElement) {
+      poseDetection.startPoseDetection(videoElement, videoParentElement);
+    }
+  } else if (message.action === "stopPoseDetection" && poseDetection) {
+    poseDetection.stopPoseDetection();
+  }
+  
 });
 
 function getVideoElementAndParent(videoSrcUrl) {
