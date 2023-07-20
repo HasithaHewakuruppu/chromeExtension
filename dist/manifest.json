@@ -1,14 +1,17 @@
 {
-    "manifest_version": 3,
-    "name": "Your Extension Name",
-    "version": "1.0",
-    "description": "Your extension description.",
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["script.js"],
-        "css": ["style.css"]
-      }
-    ]
-  }
-  
+  "manifest_version": 3,
+  "name": "Tensorflow Fun",
+  "version": "1.0.0",
+  "description": "Provides a fun way to apply Tensorflow.js models directly on web videos.",
+  "permissions":["contextMenus", "activeTab"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/watch?v=*"],
+      "js": ["script.js"],
+      "css": ["style.css"]
+    }
+  ]
+}
