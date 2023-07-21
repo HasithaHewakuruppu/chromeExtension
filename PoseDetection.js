@@ -1,8 +1,8 @@
-require('@tensorflow/tfjs-core');
-require('@tensorflow/tfjs-backend-cpu');
-require('@tensorflow/tfjs-backend-webgl');
-require('@tensorflow/tfjs-converter');
-const posenet = require('@tensorflow-models/posenet');
+import '@tensorflow/tfjs-core';
+import '@tensorflow/tfjs-backend-cpu';
+import '@tensorflow/tfjs-backend-webgl';
+import '@tensorflow/tfjs-converter';
+import * as posenet from '@tensorflow-models/posenet';
 
 class PoseDetection {
   constructor() {
@@ -17,6 +17,12 @@ class PoseDetection {
   async startPoseDetection(videoElement, videoParentElement) {
     if (this.isDetecting) return;
 
+    const videoWidth = videoElement.videoWidth;
+    const videoHeight = videoElement.videoHeight;
+
+    videoElement.width = videoWidth;  
+    videoElement.height = videoHeight;
+
     this.videoElement = videoElement;
     this.videoParentElement = videoParentElement;
 
@@ -24,7 +30,12 @@ class PoseDetection {
     this.stopVideoPoseDetection = false;
     console.log("Start Pose Detection clicked");
 
-    this.model = await posenet.load();
+    // Get the resolution of the video element
+
+    this.model = await posenet.load({
+      inputResolution: { width: videoWidth, height: videoHeight },
+      scale: 0.8
+    });
     this.videoParentElement.classList.add("videoView");
     this.predictPoseDetection();
   }
@@ -46,14 +57,13 @@ class PoseDetection {
 
     // Estimate poses from the video element.
     const poses = await this.model.estimateMultiplePoses(this.videoElement);
-    console.log(poses); 
     this.removeKeypoints();
 
     for (const pose of poses) {
       for (const keypoint of pose.keypoints) {
         if (keypoint.score > 0.2) {
-          const keypointEl = document.createElement('div');
-          keypointEl.setAttribute('class', 'keypoint');
+          const keypointEl = document.createElement("div");
+          keypointEl.setAttribute("class", "keypoint");
           keypointEl.style = `left: ${keypoint.position.x}px; top: ${keypoint.position.y}px;`;
 
           this.videoParentElement.appendChild(keypointEl);
