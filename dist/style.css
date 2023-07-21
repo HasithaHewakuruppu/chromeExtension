@@ -34,3 +34,9 @@
     background-color: red;
     position: absolute;
   }
+
+  .canvas-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }

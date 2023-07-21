@@ -3,6 +3,11 @@ import '@tensorflow/tfjs-backend-cpu';
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-converter';
 import * as posenet from '@tensorflow-models/posenet';
+import {
+  drawKeypoints,
+  drawSkeleton,
+  drawBoundingBox,
+} from './utils'; // Importing the drawing utility functions
 
 class PoseDetection {
   constructor() {
@@ -45,7 +50,7 @@ class PoseDetection {
     this.isDetecting = false;
     this.stopVideoPoseDetection = true;
     console.log("Stop Pose Detection clicked");
-    this.removeKeypoints();
+
   }
 
   async predictPoseDetection() {
@@ -54,35 +59,35 @@ class PoseDetection {
       this.stopVideoPoseDetection = false;
       return;
     }
-
+  
     // Estimate poses from the video element.
     const poses = await this.model.estimateMultiplePoses(this.videoElement);
-    this.removeKeypoints();
-
+  
+    const canvas = document.createElement('canvas');
+    canvas.width = this.videoElement.width;
+    canvas.height = this.videoElement.height;
+    const ctx = canvas.getContext('2d');
+  
+    // Draw the pose on the transparent canvas
     for (const pose of poses) {
-      for (const keypoint of pose.keypoints) {
-        if (keypoint.score > 0.2) {
-          const keypointEl = document.createElement("div");
-          keypointEl.setAttribute("class", "keypoint");
-          keypointEl.style = `left: ${keypoint.position.x}px; top: ${keypoint.position.y}px;`;
-
-          this.videoParentElement.appendChild(keypointEl);
-          this.keypoints.push(keypointEl);
-        }
-      }
+      drawKeypoints(pose.keypoints, 0.2, ctx); // Draw keypoints on the canvas
+      drawSkeleton(pose.keypoints, 0.2, ctx); // Draw skeleton on the canvas
+      drawBoundingBox(pose.keypoints, ctx); // Draw bounding box on the canvas
     }
+  
+    const existingCanvas = this.videoParentElement.querySelector('.canvas-overlay');
+     if (existingCanvas) {
+      this.videoParentElement.removeChild(existingCanvas);
+     }
 
+     canvas.classList.add('canvas-overlay');
+     this.videoParentElement.appendChild(canvas);
+   
     if (this.isDetecting) {
       window.requestAnimationFrame(() => this.predictPoseDetection());
     }
   }
-
-  removeKeypoints() {
-    for (const keypointEl of this.keypoints) {
-      this.videoParentElement.removeChild(keypointEl);
-    }
-    this.keypoints = [];
-  }
+  
 }
 
 module.exports = PoseDetection;

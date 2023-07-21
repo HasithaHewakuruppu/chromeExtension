@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener(message => {
       poseDetection = new PoseDetection();
     }
     if (videoElement && videoParentElement) {
-      poseDetection.startPoseDetection(videoElement, videoParentElement);
+      poseDetection.startPoseDetection(videoElement, videoParentElement.parentElement);
     }
   } else if (message.action === "stopPoseDetection" && poseDetection) {
     poseDetection.stopPoseDetection();
