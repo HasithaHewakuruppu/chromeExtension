@@ -1,8 +1,10 @@
 const ObjectDetection = require('./ObjectDetection.js'); 
 const PoseDetection = require('./PoseDetection.js');
+const FaceMeshDetection = require('./FaceMeshDetection.js');
 
 let objectDetection = null;
 let poseDetection = null;
+let faceMeshDetection = null;
 
 chrome.runtime.onMessage.addListener(message => {
   const [videoElement, videoParentElement] = getVideoElementAndParent(message.srcUrl);
@@ -28,7 +30,18 @@ chrome.runtime.onMessage.addListener(message => {
   } else if (message.action === "stopPoseDetection" && poseDetection) {
     poseDetection.stopPoseDetection();
   }
-  
+
+  if (message.action === "startFaceMeshDetection") {
+    if (!faceMeshDetection) {
+      faceMeshDetection = new FaceMeshDetection();
+    }
+    if (videoElement && videoParentElement) {
+      faceMeshDetection.startFaceMeshDetection(videoElement, videoParentElement.parentElement);
+    }
+  } else if (message.action === "stopFaceMeshDetection" && faceMeshDetection) {
+    faceMeshDetection.stopFaceMeshDetection();
+  }
+
 });
 
 function getVideoElementAndParent(videoSrcUrl) {

@@ -220,6 +220,38 @@ function drawPoints(ctx, points, radius, color) {
   }
 }
 
+export const drawMesh = (predictions, ctx) => {
+  if (predictions.length > 0) {
+    predictions.forEach((prediction) => {
+      const keypoints = prediction.scaledMesh;
+
+      //  Draw Triangles
+      for (let i = 0; i < TRIANGULATION.length / 3; i++) {
+        // Get sets of three keypoints for the triangle
+        const points = [
+          TRIANGULATION[i * 3],
+          TRIANGULATION[i * 3 + 1],
+          TRIANGULATION[i * 3 + 2],
+        ].map((index) => keypoints[index]);
+        //  Draw triangle
+        drawPath(ctx, points, true);
+      }
+
+      // Draw Dots
+      for (let i = 0; i < keypoints.length; i++) {
+        const x = keypoints[i][0];
+        const y = keypoints[i][1];
+
+        ctx.beginPath();
+        ctx.arc(x, y, 1 /* radius */, 0, 3 * Math.PI);
+        ctx.fillStyle = "aqua";
+        ctx.fill();
+      }
+    });
+  }
+};
+
+
 /**
  * Draw offset vector values, one of the model outputs, on to the canvas
  * Read our blog post for a description of PoseNet's offset vector outputs
