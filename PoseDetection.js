@@ -39,7 +39,7 @@ class PoseDetection {
 
     this.model = await posenet.load({
       inputResolution: { width: videoWidth, height: videoHeight },
-      scale: 0.8
+      scale: 1
     });
     this.videoParentElement.classList.add("videoView");
     this.predictPoseDetection();
@@ -64,6 +64,12 @@ class PoseDetection {
     const poses = await this.model.estimateMultiplePoses(this.videoElement);
   
     const canvas = document.createElement('canvas');
+    canvas.style.position = "absolute";
+    canvas.style.top = "0";
+    canvas.style.left = "0";
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    canvas.style.zIndex = "9999";
     canvas.width = this.videoElement.width;
     canvas.height = this.videoElement.height;
     const ctx = canvas.getContext('2d');
