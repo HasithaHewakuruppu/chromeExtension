@@ -4,7 +4,7 @@ import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-converter';
 import '@mediapipe/face_mesh';
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
-import { drawMesh } from "./utils";
+import { drawMesh } from "./utilities";
 
 class FaceMeshDetection {
   constructor() {
@@ -32,13 +32,7 @@ class FaceMeshDetection {
     console.log("Start FaceMesh Detection clicked");
 
     // Load the FaceMesh model
-    // console.log(facemesh);
-    const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
-    const detectorConfig = {
-     runtime: 'mediapipe',
-     solutionPath: 'base/node_modules/@mediapipe/face_mesh',
-    };
-    detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
+    this.model = await faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
 
     this.videoParentElement.classList.add("videoView");
     this.predictFaceMeshDetection();
@@ -58,10 +52,19 @@ class FaceMeshDetection {
       return;
     }
 
-    // Estimate faces from the video element.
-    const estimationConfig = {flipHorizontal: false};
-    const faces = await detector.estimateFaces(image, estimationConfig);
+    // console.log(faceLandmarksDetection);
+    const faces = await this.model.estimateFaces({input:this.videoElement});
+    // console.log(faces);
 
+    // const model = faceLandmarksDetection.SupportedPackages.mediapipeFacemesh;
+    // const detectorConfig = {
+    //  runtime: 'mediapipe',
+    //  solutionPath: sol,
+    // };
+    // console.log(detectorConfig.solutionPath);
+    // const detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
+    // const estimationConfig = {flipHorizontal: false};
+    // const faces = await detector.estimateFaces(image, estimationConfig);
 
     const canvas = document.createElement('canvas');
     canvas.style.position = "absolute";

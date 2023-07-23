@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "parcel build script.js --out-dir dist --public-url ./"
+    "build": "parcel build script.js --out-dir dist --public-url ./",
+    "dev": "parcel script.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@mediapipe/face_mesh": "^0.4.1633559619",
     "@tensorflow-models/coco-ssd": "^2.2.2",
-    "@tensorflow-models/face-landmarks-detection": "^1.0.2",
+    "@tensorflow-models/face-landmarks-detection": "0.0.2",
     "@tensorflow-models/posenet": "^2.2.2",
     "@tensorflow/tfjs": "^4.9.0",
     "@tensorflow/tfjs-backend-cpu": "^4.9.0",
