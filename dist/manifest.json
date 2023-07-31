@@ -13,5 +13,12 @@
       "js": ["content_script.js"],
       "css": ["style.css"]
     }
-  ]
+  ],
+  "web_accessible_resources": [
+    {
+        "resources": ["images/alphaSnow.jpg"],
+        "matches": ["<all_urls>"],
+        "use_dynamic_url": false
+    }
+]
 }
