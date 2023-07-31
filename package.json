@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "parcel build script.js --out-dir dist --public-url ./",
-    "dev": "parcel script.js"
+    "build": "parcel build content_script.js --out-dir dist --public-url ./",
+    "dev": "parcel content_script.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +19,8 @@
     "@tensorflow/tfjs-backend-cpu": "^4.9.0",
     "@tensorflow/tfjs-backend-webgl": "^4.9.0",
     "@tensorflow/tfjs-converter": "^4.9.0",
-    "@tensorflow/tfjs-core": "^4.9.0"
+    "@tensorflow/tfjs-core": "^4.9.0",
+    "three": "^0.155.0"
   },
   "devDependencies": {
     "parcel-bundler": "^1.8.1"
