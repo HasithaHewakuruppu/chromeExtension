@@ -6,6 +6,7 @@ const SnowEffect = require('./models/SnowEffect.js');
 let objectDetection = null;
 let poseDetection = null;
 let faceMeshDetection = null;
+let snowEffect = null;
 
 chrome.runtime.onMessage.addListener(message => {
   const [videoElement, videoParentElement] = getVideoElementAndParent(message.srcUrl);
@@ -41,6 +42,17 @@ chrome.runtime.onMessage.addListener(message => {
     }
   } else if (message.action === "stopFaceMeshDetection" && faceMeshDetection) {
     faceMeshDetection.stopFaceMeshDetection();
+  }
+
+  if (message.action === "startSnowing") {
+    if (!snowEffect) {
+      snowEffect = new SnowEffect();
+    }
+    if (videoElement && videoParentElement) {
+      snowEffect.startSnowing(videoElement, videoParentElement);
+    }
+  } else if (message.action === "stopSnowing" && snowEffect) {
+    snowEffect.stopSnowing();
   }
 
 });

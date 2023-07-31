@@ -60,6 +60,26 @@ chrome.runtime.onInstalled.addListener(function() {
         parentId: "faceMeshDetection"
     });
 
+    chrome.contextMenus.create({
+        title: "Make it Snow",
+        id: "makeItSnow",
+        contexts: ["video","page"]
+    });
+    
+    chrome.contextMenus.create({
+        title: "Start Snowing",
+        id: "startSnowing",
+        contexts: ["video","page"],
+        parentId: "makeItSnow"
+    });
+    
+    chrome.contextMenus.create({
+        title: "Stop Snowing",
+        id: "stopSnowing",
+        contexts: ["video","page"],
+        parentId: "makeItSnow"
+    });
+
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
@@ -97,6 +117,18 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     } else if (info.menuItemId === "stopFaceMeshDetection") {
         chrome.tabs.sendMessage(tab.id, { 
             action: "stopFaceMeshDetection",
+            srcUrl: info.srcUrl
+        });
+    }
+
+    if (info.menuItemId === "startSnowing") {
+        chrome.tabs.sendMessage(tab.id, { 
+            action: "startSnowing",
+            srcUrl: info.srcUrl
+        });
+    } else if (info.menuItemId === "stopSnowing") {
+        chrome.tabs.sendMessage(tab.id, { 
+            action: "stopSnowing",
             srcUrl: info.srcUrl
         });
     }
