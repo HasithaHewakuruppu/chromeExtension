@@ -4,15 +4,17 @@ import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-converter';
 import '@mediapipe/face_mesh';
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
-import { drawMesh } from "../utilities";
+import FaceMeshThreeJS from "../utils/FaceMeshThreeJS";
 
 class FaceMeshDetection {
+
   constructor() {
     this.isDetecting = false;
     this.stopVideoFaceMeshDetection = false;
     this.model = null;
     this.videoElement = null;
     this.videoParentElement = null;
+    this.faceMeshThreeJS = null;
   }
 
   async startFaceMeshDetection(videoElement, videoParentElement) {
@@ -27,11 +29,12 @@ class FaceMeshDetection {
     this.videoElement = videoElement;
     this.videoParentElement = videoParentElement;
 
+    this.faceMeshThreeJS = new FaceMeshThreeJS(this.videoElement, this.videoParentElement);
+ 
     this.isDetecting = true;
     this.stopVideoFaceMeshDetection = false;
     console.log("Start FaceMesh Detection clicked");
 
-    // Load the FaceMesh model
     this.model = await faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
 
     this.videoParentElement.classList.add("videoView");
@@ -43,53 +46,26 @@ class FaceMeshDetection {
     this.isDetecting = false;
     this.stopVideoFaceMeshDetection = true;
     console.log("Stop FaceMesh Detection clicked");
+    this.faceMeshThreeJS.dispose();
   }
 
   async predictFaceMeshDetection() {
+
     if (this.stopVideoFaceMeshDetection) {
       this.isDetecting = false;
       this.stopVideoFaceMeshDetection = false;
       return;
     }
 
-    // console.log(faceLandmarksDetection);
     const faces = await this.model.estimateFaces({input:this.videoElement});
     // console.log(faces);
 
-    // const model = faceLandmarksDetection.SupportedPackages.mediapipeFacemesh;
-    // const detectorConfig = {
-    //  runtime: 'mediapipe',
-    //  solutionPath: sol,
-    // };
-    // console.log(detectorConfig.solutionPath);
-    // const detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
-    // const estimationConfig = {flipHorizontal: false};
-    // const faces = await detector.estimateFaces(image, estimationConfig);
-
-    const canvas = document.createElement('canvas');
-    canvas.style.position = "absolute";
-    canvas.style.top = "0";
-    canvas.style.left = "0";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    canvas.style.zIndex = "9999";
-    canvas.width = this.videoElement.width;
-    canvas.height = this.videoElement.height;
-    const ctx = canvas.getContext('2d');
-    
-    drawMesh(faces, ctx)
+    this.faceMeshThreeJS.drawMesh(faces);
    
-    const existingCanvas = this.videoParentElement.querySelector('.canvas-overlay');
-    if (existingCanvas) {
-      this.videoParentElement.removeChild(existingCanvas);
-    }
-
-    canvas.classList.add('canvas-overlay');
-    this.videoParentElement.appendChild(canvas);
-
     if (this.isDetecting) {
       window.requestAnimationFrame(() => this.predictFaceMeshDetection());
     }
+
   }
 }
 

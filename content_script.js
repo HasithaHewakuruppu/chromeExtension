@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener(message => {
       faceMeshDetection = new FaceMeshDetection();
     }
     if (videoElement && videoParentElement) {
-      faceMeshDetection.startFaceMeshDetection(videoElement, videoParentElement.parentElement);
+      faceMeshDetection.startFaceMeshDetection(videoElement, videoParentElement);
     }
   } else if (message.action === "stopFaceMeshDetection" && faceMeshDetection) {
     faceMeshDetection.stopFaceMeshDetection();

@@ -3,7 +3,7 @@ chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create({
         title: "Object Detection on Video",
         id: "objectDetection",
-        contexts: ["video"]
+        contexts: ["video","page"]
     });
 
     chrome.contextMenus.create({
@@ -16,14 +16,14 @@ chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create({
         title: "Stop Object Detection",
         id: "stopObjectDetection",
-        contexts: ["video"],
+        contexts: ["video","page"],
         parentId: "objectDetection"
     });
 
     chrome.contextMenus.create({
         title: "Pose Detection on Video",
         id: "poseDetection",
-        contexts: ["video"]
+        contexts: ["video","page"]
     });
 
     chrome.contextMenus.create({
@@ -36,14 +36,14 @@ chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create({
         title: "Stop Pose Detection",
         id: "stopPoseDetection",
-        contexts: ["video"],
+        contexts: ["video","page"],
         parentId: "poseDetection"
     });
 
     chrome.contextMenus.create({
         title: "FaceMesh Detection on Video",
         id: "faceMeshDetection",
-        contexts: ["video"]
+        contexts: ["video","page"]
     });
 
     chrome.contextMenus.create({
@@ -56,7 +56,7 @@ chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create({
         title: "Stop FaceMesh Detection",
         id: "stopFaceMeshDetection",
-        contexts: ["video"],
+        contexts: ["video","page"],
         parentId: "faceMeshDetection"
     });
 
@@ -69,7 +69,7 @@ chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create({
         title: "Start Snowing",
         id: "startSnowing",
-        contexts: ["video","page"],
+        contexts: ["video"],
         parentId: "makeItSnow"
     });
     

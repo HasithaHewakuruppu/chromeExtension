@@ -133,7 +133,7 @@ class SnowEffect {
     const positions = this.geometry.attributes.position.array;
     for (let i = 0; i < positions.length; i += 3) {
       // adjust this to control speed of fall
-      positions[i + 1] -= 0.003; 
+      positions[i + 1] -= 0.0015; 
   
       // create a slight horizontal drift 
       positions[i] += Math.sin(elapsedTime + positions[i]) * 0.001;

@@ -7,7 +7,7 @@ import {
   drawKeypoints,
   drawSkeleton,
   drawBoundingBox,
-} from '../utilities'; // Importing the drawing utility functions
+} from '../utils/utilities'; // Importing the drawing utility functions
 
 class PoseDetection {
   constructor() {
@@ -50,7 +50,10 @@ class PoseDetection {
     this.isDetecting = false;
     this.stopVideoPoseDetection = true;
     console.log("Stop Pose Detection clicked");
-
+    const existingCanvas = this.videoParentElement.querySelector('.canvas-overlay');
+    if (existingCanvas) {
+     this.videoParentElement.removeChild(existingCanvas);
+    }
   }
 
   async predictPoseDetection() {
