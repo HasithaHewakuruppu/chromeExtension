@@ -50,13 +50,14 @@ class BallPitEffect {
     // Initialize physics engine, world, and components
     this.initializeEngine();
     this.initializeWorld();
-    this.initializeMouseConstraint();
     this.initializeBoundaries();
     this.initializeBalls();
     this.initializeRenderer();
-
+   
     // Run the engine
     this.runEngine();
+    this.initializeMouseConstraint();
+
   }
 
   stopBallPit() {
@@ -82,13 +83,6 @@ class BallPitEffect {
 
   initializeWorld() {
     this.world = this.engine.world;
-  }
-
-  initializeMouseConstraint() {
-    this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
-      mouse: Matter.Mouse.create(this.canvas)
-    });
-    Matter.World.add(this.world, this.mouseConstraint);
   }
 
   initializeBoundaries() {
@@ -132,6 +126,19 @@ class BallPitEffect {
   runEngine() {
     Matter.Runner.run(this.engine);
     Matter.Render.run(this.renderer);
+  }
+
+  initializeMouseConstraint() {
+    this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
+      mouse: Matter.Mouse.create(this.renderer.canvas),
+      constraint: {
+        stiffness: 0.2,
+        render: {
+            visible: false
+        }
+      }
+    });
+    Matter.World.add(this.world, this.mouseConstraint);
   }
 }
 

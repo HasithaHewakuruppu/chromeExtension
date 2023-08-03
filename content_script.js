@@ -62,7 +62,7 @@ chrome.runtime.onMessage.addListener(message => {
       ballPitEffect = new BallPitEffect();
     }
     if (videoElement && videoParentElement) {
-      ballPitEffect.startBallPit(videoElement, videoParentElement.parentElement);
+      ballPitEffect.startBallPit(videoElement, videoParentElement);
     }
   } else if (message.action === "stopBallPit" && ballPitEffect) {
     ballPitEffect.stopBallPit();
