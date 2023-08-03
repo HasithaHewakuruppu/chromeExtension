@@ -20,6 +20,8 @@
     "@tensorflow/tfjs-backend-webgl": "^4.9.0",
     "@tensorflow/tfjs-converter": "^4.9.0",
     "@tensorflow/tfjs-core": "^4.9.0",
+    "cannon": "^0.6.2",
+    "matter-js": "^0.19.0",
     "three": "^0.155.0"
   },
   "devDependencies": {

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TRIANGULATION } from './utilities';
 
 // Create geometries
@@ -41,6 +42,9 @@ class FaceMeshThreeJS {
         this.renderer.domElement.style.zIndex = 9999; // Set a high z-index
         this.videoParentElement.appendChild(this.renderer.domElement);
         this.camera.position.z = 5;
+
+        // Add these lines
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     }
 
     clearScene() {
@@ -83,7 +87,7 @@ class FaceMeshThreeJS {
 
                 // Drawing points
                 const dotGeometry = new THREE.BufferGeometry();
-                const dotMaterial = new THREE.PointsMaterial({ size: 1, sizeAttenuation: false, color: "aqua" });
+                const dotMaterial = new THREE.PointsMaterial({ size: 2.5, sizeAttenuation: false, color: "blue" });
 
                 const dotVertices = [];
 
@@ -103,6 +107,9 @@ class FaceMeshThreeJS {
         }
 
         this.renderer.render(this.scene, this.camera);
+        
+        // Add this line
+        this.controls.update();
     }
 }
 

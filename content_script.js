@@ -2,11 +2,13 @@ const ObjectDetection = require('./models/ObjectDetection.js');
 const PoseDetection = require('./models/PoseDetection.js');
 const FaceMeshDetection = require('./models/FaceMeshDetection.js');
 const SnowEffect = require('./models/SnowEffect.js');
+const BallPitEffect = require('./models/BallPitEffect.js');
 
 let objectDetection = null;
 let poseDetection = null;
 let faceMeshDetection = null;
 let snowEffect = null;
+let ballPitEffect = null;
 
 chrome.runtime.onMessage.addListener(message => {
   const [videoElement, videoParentElement] = getVideoElementAndParent(message.srcUrl);
@@ -55,6 +57,17 @@ chrome.runtime.onMessage.addListener(message => {
     snowEffect.stopSnowing();
   }
 
+  if (message.action === "startBallPit") {
+    if (!ballPitEffect) {
+      ballPitEffect = new BallPitEffect();
+    }
+    if (videoElement && videoParentElement) {
+      ballPitEffect.startBallPit(videoElement, videoParentElement.parentElement);
+    }
+  } else if (message.action === "stopBallPit" && ballPitEffect) {
+    ballPitEffect.stopBallPit();
+  }
+  
 });
 
 function getVideoElementAndParent(videoSrcUrl) {

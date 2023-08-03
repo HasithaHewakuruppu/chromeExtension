@@ -80,6 +80,26 @@ chrome.runtime.onInstalled.addListener(function() {
         parentId: "makeItSnow"
     });
 
+    chrome.contextMenus.create({
+        title: "Make Ball Pit",
+        id: "makeBallPit",
+        contexts: ["video","page"]
+    });
+    
+    chrome.contextMenus.create({
+        title: "Start Ball Pit",
+        id: "startBallPit",
+        contexts: ["video"],
+        parentId: "makeBallPit"
+    });
+    
+    chrome.contextMenus.create({
+        title: "Stop Ball Pit",
+        id: "stopBallPit",
+        contexts: ["video","page"],
+        parentId: "makeBallPit"
+    });
+
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
@@ -129,6 +149,18 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     } else if (info.menuItemId === "stopSnowing") {
         chrome.tabs.sendMessage(tab.id, { 
             action: "stopSnowing",
+            srcUrl: info.srcUrl
+        });
+    }
+
+    if (info.menuItemId === "startBallPit") {
+        chrome.tabs.sendMessage(tab.id, { 
+            action: "startBallPit",
+            srcUrl: info.srcUrl
+        });
+    } else if (info.menuItemId === "stopBallPit") {
+        chrome.tabs.sendMessage(tab.id, { 
+            action: "stopBallPit",
             srcUrl: info.srcUrl
         });
     }
