@@ -5,7 +5,6 @@ class BallPitEffect {
     this.isBallPit = false;
     this.videoElement = null;
     this.videoParentElement = null;
-    this.canvas = null;
     this.aspect = {
       width: null,
       height: null,
@@ -31,22 +30,6 @@ class BallPitEffect {
     this.isBallPit = true;
     console.log("Start Ball Pit");
 
-    // Create a canvas
-    const canvas = document.createElement('canvas');
-    canvas.style.position = "absolute";
-    canvas.style.top = "0";
-    canvas.style.left = "0";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    canvas.style.zIndex = "9998";
-    canvas.width = this.videoElement.offsetWidth;
-    canvas.height = this.videoElement.offsetHeight;
-
-    this.canvas = canvas;
-    this.canvas.className = 'ball-pit-canvas';
-    // Append the canvas to the same parent element as the video
-    this.videoParentElement.appendChild(this.canvas);
-
     // Initialize physics engine, world, and components
     this.initializeEngine();
     this.initializeWorld();
@@ -66,12 +49,6 @@ class BallPitEffect {
     this.isBallPit = false;
     console.log("Stop Ball Pit");
     
-    // Remove the canvas from the DOM and reset state
-    if (this.canvas) {
-      this.canvas.parentNode.removeChild(this.canvas);
-      this.canvas = null;
-    }
-
     // Cleanup matter.js related objects
     Matter.World.clear(this.engine.world);
     Matter.Engine.clear(this.engine);
