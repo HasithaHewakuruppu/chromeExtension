@@ -100,6 +100,26 @@ chrome.runtime.onInstalled.addListener(function() {
         parentId: "makeBallPit"
     });
 
+    chrome.contextMenus.create({
+        title: "Human Segmentation on Video",
+        id: "humanSegmentation",
+        contexts: ["video","page"]
+    });
+
+    chrome.contextMenus.create({
+        title: "Start Human Segmentation",
+        id: "startHumanSegmentation",
+        contexts: ["video"],
+        parentId: "humanSegmentation"
+    });
+
+    chrome.contextMenus.create({
+        title: "Stop Human Segmentation",
+        id: "stopHumanSegmentation",
+        contexts: ["video","page"],
+        parentId: "humanSegmentation"
+    });
+
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
@@ -161,6 +181,18 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     } else if (info.menuItemId === "stopBallPit") {
         chrome.tabs.sendMessage(tab.id, { 
             action: "stopBallPit",
+            srcUrl: info.srcUrl
+        });
+    }
+
+    if (info.menuItemId === "startHumanSegmentation") {
+        chrome.tabs.sendMessage(tab.id, { 
+            action: "startHumanSegmentation",
+            srcUrl: info.srcUrl
+        });
+    } else if (info.menuItemId === "stopHumanSegmentation") {
+        chrome.tabs.sendMessage(tab.id, { 
+            action: "stopHumanSegmentation",
             srcUrl: info.srcUrl
         });
     }

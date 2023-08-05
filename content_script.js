@@ -3,12 +3,14 @@ const PoseDetection = require('./models/PoseDetection.js');
 const FaceMeshDetection = require('./models/FaceMeshDetection.js');
 const SnowEffect = require('./models/SnowEffect.js');
 const BallPitEffect = require('./models/BallPitEffect.js');
+const HumanSegmentation = require('./models/HumanSegmentation.js');
 
 let objectDetection = null;
 let poseDetection = null;
 let faceMeshDetection = null;
 let snowEffect = null;
 let ballPitEffect = null;
+let humanSegmentation = null;
 
 chrome.runtime.onMessage.addListener(message => {
   const [videoElement, videoParentElement] = getVideoElementAndParent(message.srcUrl);
@@ -66,6 +68,17 @@ chrome.runtime.onMessage.addListener(message => {
     }
   } else if (message.action === "stopBallPit" && ballPitEffect) {
     ballPitEffect.stopBallPit();
+  }
+
+  if (message.action === "startHumanSegmentation") {
+    if (!humanSegmentation) {
+      humanSegmentation = new HumanSegmentation();
+    }
+    if (videoElement && videoParentElement) {
+      humanSegmentation.startHumanSegmentation(videoElement, videoParentElement);
+    }
+  } else if (message.action === "stopHumanSegmentation" && humanSegmentation) {
+    humanSegmentation.stopHumanSegmentation();
   }
   
 });

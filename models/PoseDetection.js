@@ -24,10 +24,8 @@ class PoseDetection {
     this.videoElement = videoElement;
     this.videoParentElement = videoParentElement;
 
-    const videoWidth = videoElement.videoWidth;
-    const videoHeight = videoElement.videoHeight;
-    this.videoElement.width = videoWidth;
-    this.videoElement.height = videoHeight;
+    this.videoElement.width = videoElement.videoWidth;
+    this.videoElement.height = videoElement.videoHeight;
 
     this.model = await posenet.load({
       inputResolution: { width: videoWidth, height: videoHeight },
@@ -175,7 +173,7 @@ class PoseDetection {
             angle: angle,
             render: {
                 fillStyle: 'red',
-                opacity: 0 
+                opacity: 1,
             },
             collisionFilter: {
               category: this.skeletonCategory,

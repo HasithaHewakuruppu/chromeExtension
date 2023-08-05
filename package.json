@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@mediapipe/face_mesh": "^0.4.1633559619",
+    "@tensorflow-models/body-pix": "^2.2.0",
     "@tensorflow-models/coco-ssd": "^2.2.2",
     "@tensorflow-models/face-landmarks-detection": "0.0.2",
     "@tensorflow-models/posenet": "^2.2.2",
@@ -20,6 +21,7 @@
     "@tensorflow/tfjs-backend-webgl": "^4.9.0",
     "@tensorflow/tfjs-converter": "^4.9.0",
     "@tensorflow/tfjs-core": "^4.9.0",
+    "@tensorflow/tfjs-node": "^4.10.0",
     "cannon": "^0.6.2",
     "matter-js": "^0.19.0",
     "three": "^0.155.0"
