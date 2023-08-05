@@ -52,30 +52,33 @@ class HumanSegmentation {
       this.stopSegmentation = false;
       return;
     }
-
+  
     // Start segmenting the frame in the video.
-    const segmentation = await this.model.segmentPerson(this.videoElement);
+    const segmentation = await this.model.segmentPersonParts(this.videoElement);
     const maskBackground = true;
-    const backgroundDarkeningMask = bodyPix.toMask(segmentation, maskBackground);
-
+  
+    // The bodyPix.toColoredPartMask function colors each body part separately.
+    const coloredPartImage = bodyPix.toColoredPartMask(segmentation);
+  
     // Clear the previous frame's mask from the canvas
     const ctx = this.canvasElement.getContext('2d');
     ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
-
-    // Draw the segmentation mask on top of the video.
+  
+    // Draw the body parts segmentation on top of the video.
     bodyPix.drawMask(
       this.canvasElement,  // The canvas element to draw on
       this.videoElement,   // The original video element
-      backgroundDarkeningMask,  // The mask
+      coloredPartImage,    // The colored part image
       0.7,  // An opacity from 0 to 1
       0,    // Mask blur radius
       maskBackground  // Whether to mask the background or the foreground
     );
-
+  
     if (this.isSegmenting) {
       window.requestAnimationFrame(() => this.predictSegmentation());
     }
   }
+  
 }
 
 module.exports = HumanSegmentation;
