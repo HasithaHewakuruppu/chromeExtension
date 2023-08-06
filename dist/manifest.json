@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "Provides a fun way to apply Tensorflow.js models directly on web videos.",
   "permissions":["contextMenus", "activeTab"],
+  "options_page": "./optionsPage/options.html",
   "background": {
     "service_worker": "background.js"
   },
