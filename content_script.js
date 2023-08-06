@@ -1,6 +1,6 @@
 const ObjectDetection = require('./models/ObjectDetection.js'); 
 const PoseDetection = require('./models/PoseDetection.js');
-const FaceMeshDetection = require('./models/OldFaceMeshDetection.js');
+const FaceMeshDetection = require('./models/FaceMeshDetection.js');
 const SnowEffect = require('./models/SnowEffect.js');
 const BallPitEffect = require('./models/BallPitEffect.js');
 const HumanSegmentation = require('./models/HumanSegmentation.js');

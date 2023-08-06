@@ -24,8 +24,11 @@ class PoseDetection {
     this.videoElement = videoElement;
     this.videoParentElement = videoParentElement;
 
-    this.videoElement.width = videoElement.videoWidth;
-    this.videoElement.height = videoElement.videoHeight;
+    const videoWidth = videoElement.videoWidth;
+    const videoHeight = videoElement.videoHeight;
+
+    this.videoElement.width = videoWidth;
+    this.videoElement.height = videoHeight;
 
     this.model = await posenet.load({
       inputResolution: { width: videoWidth, height: videoHeight },
@@ -46,8 +49,8 @@ class PoseDetection {
       element: this.videoParentElement,
       engine: this.engine,
       options: {
-        width: videoWidth,
-        height: videoHeight,
+        width: this.videoElement.width,
+        height: this.videoElement.height,
         background: 'transparent',
         wireframes: false
       }
